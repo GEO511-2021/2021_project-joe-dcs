@@ -131,7 +131,7 @@ server <- function(input, output, session) {
   
   sliderData <- reactive({
     OMdf %>%
-      filter(date <= input$Year)
+      filter(Year <= input$Year)
   })
   
   output$map <- renderLeaflet({
