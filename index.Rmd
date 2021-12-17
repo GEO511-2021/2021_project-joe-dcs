@@ -4,12 +4,11 @@ title: Invasion Dynamics of a Brittle Star at Different Spatial Scales across th
 author: "Jospeh Benz"
 subtitle: Ophiothela mirabilis
 ---
-```{r}
-```
 
 
 ```{r}
 ```
+
 
 # Introduction
 
