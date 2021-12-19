@@ -20,6 +20,17 @@ Clearly stated background and questions / hypotheses / problems being addressed.
 
 [~ 200 words]
 
+```{r}
+library(shiny)
+library(leaflet)
+library(sp)
+library(spocc)
+library(raster)
+library(tidyverse)
+library(leaflet.extras2)
+library(sf)
+```
+
 Narrative: Clear narrative description of the data sources and methods. Includes data from at least two sources that were integrated / merged in R.
 
 Code: The code associated with the project is well organized and easy to follow. Demonstrates mastery of R graphics and functions.
@@ -85,20 +96,6 @@ Tables and figures (maps and other graphics) are carefully planned to convey the
 
 Show tables, plots, etc. and describe them.
 
-```{r, fig.width=6, fig.height=3, fig.cap="Map of completely random data"}
-m <- leaflet(data) %>% 
-  addTiles() %>% 
-  addCircleMarkers(~x, ~y, radius = ~size,color = ~as.factor(category)) %>% 
-  addPopups(~x[2], ~y[2], "Random popup")
-m  # a map with the default OSM tile layer
-```
-
-
-```{r}
-data %>% 
-  ggplot(aes(x=x,y=y,col=category))+
-  geom_point()
-```
 ```{r}
 library(shiny)
 library(leaflet)
@@ -130,15 +127,15 @@ ui <- bootstrapPage(
 server <- function(input, output, session) {
   
   sliderData <- reactive({
-    OMdf %>%
+    OMdf2 %>%
       filter(Year <= input$Year)
   })
   
   output$map <- renderLeaflet({
     leaflet() %>%
       addTiles() %>%
-      fitBounds(min(OMdf$longitude), min(OMdf$latitude),
-                max(OMdf$longitude), max(OMdf$latitude))
+      fitBounds(min(OMdf2$longitude), min(OMdf2$latitude),
+                max(OMdf2$longitude), max(OMdf2$latitude))
   })
   
   observe({
@@ -150,7 +147,6 @@ server <- function(input, output, session) {
 }
 
 shinyApp(ui = ui, server = server)
-
 ```
 
 # Conclusions

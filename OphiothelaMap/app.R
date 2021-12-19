@@ -21,15 +21,15 @@ ui <- bootstrapPage(
 server <- function(input, output, session) {
     
     sliderData <- reactive({
-        OMdf %>%
+        OMdf2 %>%
             filter(Year <= input$Year)
     })
     
     output$map <- renderLeaflet({
         leaflet() %>%
             addTiles() %>%
-            fitBounds(min(OMdf$longitude), min(OMdf$latitude),
-                      max(OMdf$longitude), max(OMdf$latitude))
+            fitBounds(min(OMdf2$longitude), min(OMdf2$latitude),
+                      max(OMdf2$longitude), max(OMdf2$latitude))
     })
     
     observe({
