@@ -5,21 +5,14 @@ author: "Jospeh Benz"
 subtitle: Ophiothela mirabilis
 ---
 
-
-```{r}
-```
-
-
 # Introduction
 
-[~ 200 words]
-
-Clearly stated background and questions / hypotheses / problems being addressed. Sets up the analysis in an interesting and compelling way.
+*Ophiothela* *mirabilis* is a tiny (~ 5 mm) orange brittle star natively found on Pacific tropical reefs. It lives on structures like hard corals, soft corals, and sponges, where it feeds on particulates in the water column. In the year 2000, it was found on reefs in coastal Brazil, and has been spreading upwards through the Caribbean since, recently discovered in Florida in 2020.  In this invasive range, *O.* *mirabilis* generally reproduces asexually, splitting down the middle in a process called fissiparity, allowing it to rapidly spread across the reef. However, the mechanism for this spread is largely unknown; they are negatively buoyant and very poor swimmers, and are likely taking advantage of some other method to travel the great distances between islands in the Caribbean.  The two prevailing hypothesis include *O.* *mirabilis* being transported by shipping traffic (either in bilge water or on boat hulls) or by “rafting” on patches of *Sargassum*, a floating macroalgae common to the area. 
+In order to determine the invasion dynamics of this species, we examine the data at two different spatial scales: The West Atlantic Tropics and the island of St. John, USVI.  Looking at the entire west Atlantic will allow us to examine the saltatory spread (large jumps across habitat gaps), while focusing in on a single island informs the smaller scale spread between adjacent reefs after the brittle star has arrived. 
 
 # Materials and methods
 
-[~ 200 words]
-
+## Required packages:
 ```{r}
 library(shiny)
 library(leaflet)
@@ -30,6 +23,34 @@ library(tidyverse)
 library(leaflet.extras2)
 library(sf)
 ```
+## Data Download & Processing
+First, a bounding box for the larger spatial scale is created.
+```{r}
+Carib_extent <- extent(c(xmin=-130,xmax=-17,ymin=-26,ymax=33))
+bbox1 <- bbox(Carib_extent)
+```
+
+Using the occ() function, we can examine occurrence data for *Ophiothela* *mirabilis* within our bounding box, utilizing an array of online databases. In this case, species records are only used from the Global Biodiversity Information Facility (GBIF) to prevent the duplication of observations. Then, occ2df() will download and convert our occurrences into a data frame with latitude and longitude. Naming convention varies, so another column is added with mutate() to create a consistent name column.   
+```{r}
+OM <- occ("Ophiothela mirabilis", from = c('gbif'), has_coords=TRUE, limit=1000000, geometry=bbox1)
+OMdf <- occ2df(OM) %>%
+  mutate(simplename="Ophiothela mirabilis")
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 Narrative: Clear narrative description of the data sources and methods. Includes data from at least two sources that were integrated / merged in R.
 
@@ -110,10 +131,14 @@ library(sf)
 Carib_extent <- extent(c(xmin=-130,xmax=-17,ymin=-26,ymax=33))
 bbox1 <- bbox(Carib_extent)
 
-OM <- occ("Ophiothela mirabilis", has_coords=TRUE, limit=1000000, geometry=bbox1)
+OM <- occ("Ophiothela mirabilis", from = c('gbif','bison','inat', 'ebird', 'vertnet'), has_coords=TRUE, limit=1000000, geometry=bbox1)
 OMdf <- occ2df(OM) %>%
   mutate(simplename="Ophiothela mirabilis")
+
 OMdf$Year <- format(as.Date(OMdf$date, format="%Y/%m/%d"),"%Y")  
+
+OMdf2 <- OMdf %>%
+  filter(Year!=1971)
 ```
 ```{r cache=FALSE}
 ui <- bootstrapPage(
