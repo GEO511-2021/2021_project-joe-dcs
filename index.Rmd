@@ -1,8 +1,7 @@
 ---
 title: Invasion Dynamics of a Brittle Star at Different Spatial Scales across the
-  Caribbean
+  West Atlantic
 author: "Jospeh Benz"
-subtitle: Ophiothela mirabilis
 ---
 
 # Introduction
@@ -22,6 +21,7 @@ library(raster)
 library(tidyverse)
 library(leaflet.extras2)
 library(sf)
+library(rsconnect)
 ```
 ## Data Download & Processing
 First, a bounding box for the larger spatial scale is created.
@@ -30,7 +30,7 @@ Carib_extent <- extent(c(xmin=-130,xmax=-17,ymin=-26,ymax=33))
 bbox1 <- bbox(Carib_extent)
 ```
 
-Using the occ() function, we can examine occurrence data for *Ophiothela* *mirabilis* within our bounding box, utilizing an array of online databases. In this case, species records are only used from the Global Biodiversity Information Facility (GBIF) to prevent the duplication of observations. Then, occ2df() will download and convert our occurrences into a data frame with latitude and longitude. Naming convention varies, so another column is added with mutate() to create a consistent name column.   
+Using the occ() function from the spocc package (), we can examine occurrence data for *Ophiothela* *mirabilis* within our bounding box, utilizing an array of online databases. In this case, species records are only used from the Global Biodiversity Information Facility (GBIF) to prevent the duplication of observations. Then, occ2df() will download and convert our occurrences into a data frame with latitude and longitude. Naming convention varies, so another column is added with mutate() to create a consistent name column.   
 ```{r}
 OM <- occ("Ophiothela mirabilis", from = c('gbif'), has_coords=TRUE, limit=1000000, geometry=bbox1)
 OMdf <- occ2df(OM) %>%
